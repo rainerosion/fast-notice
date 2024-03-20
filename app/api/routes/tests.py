@@ -39,7 +39,7 @@ def get_recipe_by_id(*, rid: int) -> dict:
         raise HTTPException(status_code=500, detail="Recipe not found")
 
 
-@router.get("/search/", status_code=200)
+@router.get("/search", status_code=200)
 def search_recipes(
         keyword: Optional[str] = None, max_results: int = Query(..., le=50)
 ) -> dict:

@@ -1,4 +1,4 @@
-# Fast Notice
+al# Fast Notice
 
 ## db migration
 ```bash

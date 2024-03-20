@@ -1,4 +1,7 @@
-from pydantic.networks import PostgresDsn
+from pydantic import (
+    PostgresDsn,
+    computed_field,
+)
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -26,5 +29,9 @@ class Settings(BaseSettings):
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
         )
+
+    WORKER_ID: int = 0
+    WORKER_SEQ: int = 0
+
 
 settings = Settings()
