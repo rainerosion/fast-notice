@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 logging.info(str(settings.SQLALCHEMY_DATABASE_URI))
 
-print(str(settings.SQLALCHEMY_DATABASE_URI))
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI), echo=True)
 
 
