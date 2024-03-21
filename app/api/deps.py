@@ -29,32 +29,15 @@ SessionDep = Annotated[Session, Depends(get_db)]
 TokenDep = Annotated[str, Depends(reusable_oauth2)]
 
 
-# def get_current_user(session: SessionDep, token: TokenDep) -> User:
-#     token_data = {}
-#     try:
-#         payload = jwt.decode(
-#             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
-#         )
-#         token_data = TokenPayload(**payload)
-#     except (JWTError, ValidationError):
-#         ExceptionUtil.raise_forbidden_exception(ErrorCode.USER_CREDENTIALS_INVALID)
-#     user = session.get(User, token_data.sub)
-#     if not user:
-#         ExceptionUtil.raise_business_exception(ErrorCode.USER_NOT_LOGGED_IN)
-#     if not user.is_active:
-#         ExceptionUtil.raise_business_exception(ErrorCode.USER_INACTIVE)
-#     return user
-
 def get_current_user(session: SessionDep, token: TokenDep) -> User:
     token_data = {}
-    payload = jwt.decode(
-        token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
-    )
-    token_data = TokenPayload(**payload)
-    # try:
-    #
-    # except (JWTError, ValidationError):
-    #     ExceptionUtil.raise_forbidden_exception(ErrorCode.USER_CREDENTIALS_INVALID)
+    try:
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
+        )
+        token_data = TokenPayload(**payload)
+    except (JWTError, ValidationError):
+        ExceptionUtil.raise_forbidden_exception(ErrorCode.USER_CREDENTIALS_INVALID)
     user = session.get(User, token_data.sub)
     if not user:
         ExceptionUtil.raise_business_exception(ErrorCode.USER_NOT_LOGGED_IN)

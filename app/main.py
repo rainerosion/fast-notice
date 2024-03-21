@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.exceptions import HTTPException
 from starlette.responses import JSONResponse
 
 from app.api.main import router
@@ -51,6 +52,21 @@ async def forbidden_exception_handler(request, exception):
     return JSONResponse(
         content=error.dict(),
         status_code=403
+    )
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request, exception):
+    """
+    deal with other http exception
+    :param request:
+    :param exception:
+    :return:
+    """
+    error = Result.error(code=exception.status_code, msg=exception.detail)
+    return JSONResponse(
+        content=error.dict(),
+        status_code=exception.status_code
     )
 
 

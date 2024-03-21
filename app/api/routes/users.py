@@ -1,7 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from sqlmodel import select
 
-from app.api.deps import SessionDep, CurrentUser
+from app.api.deps import SessionDep, CurrentUser, get_current_user
 from app.core.errors import ErrorCode
 from app.core.resp import Result
 from app.core.utils import ConditionUtils
@@ -17,11 +17,16 @@ def create_user(*, session: SessionDep, user_create: UserCreate):
     return user_in
 
 
-@router.get("/", summary="Get all users", response_model=Result[User])
-def get_all_users(session: SessionDep, current_user: CurrentUser):
+@router.get(
+    "/",
+    summary="Get all users",
+    dependencies=[Depends(get_current_user)],
+    response_model=Result[list[User]]
+)
+def get_all_users(session: SessionDep):
     statement = select(User)
     user_all = session.exec(statement).all()
-    return user_all
+    return Result[list[User]].success(data=user_all)
 
 
 @router.get("/me", summary="Get me", response_model=Result[User])
