@@ -2,8 +2,10 @@ from fastapi import APIRouter
 from sqlmodel import select
 
 from app.api.deps import SessionDep
+from app.core.errors import ErrorCode
 from app.core.exceptions import BusinessException
 from app.core.resp import Result
+from app.core.utils import ConditionUtils
 from app.crud import users
 from app.models.user import User, UserCreate
 
@@ -20,7 +22,5 @@ def create_user(*, session: SessionDep, user_create: UserCreate):
 def get_user_by_username(username: str, session: SessionDep):
     statement = select(User).where(User.username == username)
     user = session.exec(statement).first()
-    # 判断用户非空返回，否则提示
-    if not user:
-        raise BusinessException(1001, "用户不存在")
+    ConditionUtils.must_not_empty(user, ErrorCode.USER_NOT_FOUND)
     return Result[User].success(data=user)
