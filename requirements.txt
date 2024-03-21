@@ -1,0 +1,7 @@
+fastapi~=0.110.0
+sqlmodel~=0.0.16
+pydantic~=2.6.4
+passlib~=1.7.4
+sqlalchemy~=2.0.28
+uvicorn~=0.24.0.post1
+alembic~=1.13.1

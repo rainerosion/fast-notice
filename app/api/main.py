@@ -11,7 +11,7 @@ def root() -> dict:
     """
     Root GET
     """
-    return {"msg": "Server Worked!"}
+    return {"msg": "Service is running!"}
 
 
 router.include_router(login.router, prefix="/login", tags=["login"])
