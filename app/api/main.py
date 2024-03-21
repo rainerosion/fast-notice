@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.routes import users, tasks, tests
+from app.api.routes import users, login
 
 router = APIRouter()
 
@@ -11,9 +11,8 @@ def root() -> dict:
     """
     Root GET
     """
-    return {"msg": "Hello, World!"}
+    return {"msg": "Server Worked!"}
 
 
-router.include_router(tests.router, prefix="/tests", tags=["test"])
+router.include_router(login.router, prefix="/login", tags=["login"])
 router.include_router(users.router, prefix="/user", tags=["users"])
-router.include_router(tasks.router, prefix="/task", tags=["tasks"])
