@@ -32,6 +32,8 @@ class Settings(BaseSettings):
 
     WORKER_ID: int = 0
     WORKER_SEQ: int = 0
+    SECRET_KEY: str = ""
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
 
 
 settings = Settings()

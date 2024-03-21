@@ -19,6 +19,12 @@ def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    verify password
+    :param plain_password: original password
+    :param hashed_password: hashed password
+    :return:
+    """
     return pwd_context.verify(plain_password, hashed_password)
 
 
