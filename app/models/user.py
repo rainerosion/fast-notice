@@ -1,3 +1,7 @@
+import re
+
+from fastapi import Body
+from pydantic import validator, field_validator
 from sqlmodel import Field, SQLModel
 
 from app.models.base import BaseField
@@ -12,9 +16,15 @@ class User(BaseField, table=True):
 
 
 class UserCreate(SQLModel):
-    username: str
+    username: str = Body(..., max_length=50, embed=True)
     email: str
     password: str
+
+    @field_validator("email")
+    def validate_email(cls, v):
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", v):
+            raise ValueError("Invalid email format")
+        return v
 
 
 class UserUpdate(SQLModel):
@@ -24,7 +34,7 @@ class UserUpdate(SQLModel):
 
 
 class UserOut(SQLModel):
-    id: str
+    id: int
     username: str
     email: str
     is_active: bool

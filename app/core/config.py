@@ -35,5 +35,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str = ""
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
 
+    PROJECT_NAME: str = "FastAPI"
+    VERSION: str = "0.1.0"
+
 
 settings = Settings()
