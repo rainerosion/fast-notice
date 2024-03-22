@@ -1,13 +1,16 @@
 import uvicorn
 from fastapi import FastAPI
-from fastapi.exceptions import HTTPException
+from fastapi.exceptions import HTTPException, ResponseValidationError
+from pydantic_core import ValidationError
 from starlette.responses import JSONResponse
 
 from app.api.main import router
 from app.core.exceptions import BusinessException, UnauthorizedException, ForbiddenException
 from app.core.resp import Result
 
-app = FastAPI()
+app = FastAPI(
+    debug=True,
+)
 
 
 @app.exception_handler(BusinessException)
@@ -55,6 +58,22 @@ async def forbidden_exception_handler(request, exception):
     )
 
 
+@app.exception_handler(ValidationError)
+async def validation_exception_handler(request, exception):
+    """
+    deal with validation exception
+    :param request:
+    :param exception:
+    :return:
+    """
+    validation_info = [{'field': error['loc'][0], 'message': error['msg']} for error in exception.errors()]
+    error = Result.error(code=422, msg="Validation Error.", data=validation_info)
+    return JSONResponse(
+        content=error.dict(),
+        status_code=422
+    )
+
+
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exception):
     """
@@ -67,6 +86,21 @@ async def http_exception_handler(request, exception):
     return JSONResponse(
         content=error.dict(),
         status_code=exception.status_code
+    )
+
+
+@app.exception_handler(Exception)
+async def other_exception_handler(request, exception):
+    """
+    deal with other exception
+    :param request:
+    :param exception:
+    :return:
+    """
+    error = Result.error(code=500, msg="Internal Server Error")
+    return JSONResponse(
+        content=error.dict(),
+        status_code=500
     )
 
 

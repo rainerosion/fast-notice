@@ -21,11 +21,12 @@ class Result(BaseModel, Generic[T]):
         return Result[T](code=200, msg=msg, data=data)
 
     @staticmethod
-    def error(*, code: str, msg: str):
+    def error(*, code: int, msg: str, data: T = None):
         """
         Error response
+        :param data:
         :param code: error code
         :param msg: error message
         :return:
         """
-        return Result(code=code, msg=msg)
+        return Result(code=code, msg=msg, data=data)

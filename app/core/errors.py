@@ -12,3 +12,4 @@ class ErrorCode(Enum):
     # 无法验证凭据
     USER_CREDENTIALS_INVALID = (1005, "无法验证凭据")
     USER_NOT_LOGGED_IN = (1006, "用户未登录")
+    USER_ALREADY_EXISTS = (1007, "用户已存在")
