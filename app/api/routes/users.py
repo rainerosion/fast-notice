@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends
 from sqlmodel import select
 
@@ -25,6 +27,20 @@ def create_user(*, session: SessionDep, user_create: UserCreate):
 )
 def get_all_users(session: SessionDep):
     statement = select(User)
+    user_all = session.exec(statement).all()
+    return Result[list[UserOut]].success(data=user_all)
+
+
+# query user by page
+@router.get(
+    "/page",
+    summary="Get all users by page",
+    dependencies=[Depends(get_current_user)],
+    response_model=Result[list[UserOut]]
+)
+def get_all_users_by_page(session: SessionDep, page: int = 1, size: int = 10, **kwargs: Optional[dict]):
+    print(kwargs)
+    statement = select(User).limit(size).offset((page - 1) * size)
     user_all = session.exec(statement).all()
     return Result[list[UserOut]].success(data=user_all)
 

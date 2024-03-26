@@ -1,7 +1,6 @@
 import re
 
-from fastapi import Body
-from pydantic import validator, field_validator
+from pydantic import field_validator
 from sqlmodel import Field, SQLModel
 
 from app.models.base import BaseField
@@ -16,11 +15,12 @@ class User(BaseField, table=True):
 
 
 class UserCreate(SQLModel):
-    username: str = Body(..., max_length=50, embed=True)
+    username: str = Field(max_length=50)
     email: str
     password: str
 
     @field_validator("email")
+    @classmethod
     def validate_email(cls, v):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", v):
             raise ValueError("Invalid email format")

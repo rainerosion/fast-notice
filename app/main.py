@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException, RequestValidationError
-from pydantic_core import ValidationError
+# from pydantic_core import ValidationError
 from starlette.responses import JSONResponse
 
 from app.api.main import router
@@ -30,7 +30,7 @@ async def exception_handler(request, exception):
         status_code = 401
     elif isinstance(exception, ForbiddenException):
         status_code = 403
-    elif isinstance(exception, RequestValidationError) or isinstance(exception, ValidationError):
+    elif isinstance(exception, RequestValidationError):
         status_code = 422
     elif isinstance(exception, HTTPException):
         status_code = exception.status_code
